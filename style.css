@@ -1,0 +1,13 @@
+#canvas {
+  transform: rotateY(100deg);
+  -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+  -moz-transform:rotateY(180deg); /* Firefox */
+}
+
+#webcam, #canvas{
+  position: absolute;
+  width: 640px;
+  height: 480px;
+  z-index: 9;
+}
+

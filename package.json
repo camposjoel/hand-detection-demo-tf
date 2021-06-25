@@ -1,0 +1,16 @@
+{
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^2.3.8"
+  },
+  "dependencies": {
+    "@tensorflow-models/handpose": "0.0.7",
+    "@tensorflow/tfjs": "^3.7.0",
+    "webcam-easy": "^1.0.5"
+  }
+}
