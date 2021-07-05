@@ -11,6 +11,7 @@
   "dependencies": {
     "@tensorflow-models/handpose": "0.0.7",
     "@tensorflow/tfjs": "^3.7.0",
+    "fingerpose": "0.0.2",
     "webcam-easy": "^1.0.5"
   }
 }
