@@ -1,5 +1,5 @@
 import Webcam from 'webcam-easy';
-import * as tf from '@tensorflow/tfjs';
+import '@tensorflow/tfjs-backend-webgl';
 import * as handpose from '@tensorflow-models/handpose';
 import * as fingerpose from 'fingerpose';
 import { drawHand } from './utils';
@@ -37,24 +37,24 @@ webcam.start()
   });
 
 async function runHandpose() {
-  const net = await handpose.load();
+  const model = await handpose.load();
   console.log("Hadpose loaded");
   setInterval(() => {
-    detect(net);
+    detect(model);
   }, 100);
 }
 
-async function detect(net) {
+async function detect(model) {
   const videoWidth = webcamElement.videoWidth;
   const videoHeight = webcamElement.videoHeight;
   webcamElement.width = videoWidth;
   webcamElement.height = videoHeight;
   canvasElement.width = videoWidth;
   canvasElement.height = videoHeight;
-  const hand = await net.estimateHands(webcamElement);
+  const predictions = await model.estimateHands(webcamElement);
   //console.log(hand);
 
-  if (hand.length > 0) {
+  if (predictions.length > 0) {
     const GE = new fingerpose.GestureEstimator([
       fingerpose.Gestures.ThumbsUpGesture,
       AngryGesture,
@@ -64,22 +64,21 @@ async function detect(net) {
       FourGesture,
       FiveGesture
     ]);
-    const gesture = await GE.estimate(hand[0].landmarks, 4);
+    const gesture = await GE.estimate(predictions[0].landmarks, 4);
     if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
-      // console.log(gesture.gestures);
 
-      const confidence = gesture.gestures.map(
-        (prediction) => prediction.confidence
+      const score = gesture.gestures.map(
+        (prediction) => prediction.score
       );
-      const maxConfidence = confidence.indexOf(
-        Math.max.apply(null, confidence)
+      const maxConfidence = score.indexOf(
+        Math.max.apply(null, score)
       );
-      // console.log(gesture.gestures[maxConfidence].name);
+
       messagebox.innerHTML = msg[gesture.gestures[maxConfidence].name];
       
     }
   }
 
   const ctx = canvasElement.getContext("2d");
-  drawHand(hand, ctx);
+  drawHand(predictions, ctx);
 }
